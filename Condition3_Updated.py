@@ -1,8 +1,8 @@
 import sys
 import pandas as pd
-variants = pd.read_csv("/run/media/administrator/Expansion1/azure_backup/final_vcf/s3_uploaded_snps/1721_samples/PRX/Pharmacogenomics/PGx_Genes_Variants_DP15/{}_final_DP.vcf".format(sys.argv[1], sys.argv[1]), comment= '#', sep = '\t', header=None, low_memory=False)
+variants = pd.read_csv("/{}_final_DP.vcf".format(sys.argv[1], sys.argv[1]), comment= '#', sep = '\t', header=None, low_memory=False)
 variants.columns = ['CHROM', 'POS', 'rsID', 'REF', 'ALT', 'QUAL', 'FILTER', 'INFO', 'FORMAT', 'SAMPLE']
-df = pd.read_excel("~/Downloads/Madhu_Updated/13genes_coordinates_haplotypes_07122023.xlsx", header = 0)
+df = pd.read_excel("/13genes_coordinates_haplotypes_07122023.xlsx", header = 0)
 # Step 1: Create a dictionary from the df DataFrame
 chromosome_dict = {}
 for _, row in df.iterrows():
@@ -69,5 +69,5 @@ df3 = df3.groupby(['CHROM', 'POS']).agg({'Haplotype': lambda x: ','.join(x.uniqu
 df3.rename(columns={'POS':'POS_df2', 'Haplotype':'Haplotype_updated'}, inplace=True)
 final = pd.merge(merged_df, df3, on = ['CHROM', 'POS_df2'], how = 'left', sort = False)
 final['Haplotype_updated'] = final['Haplotype_updated'].apply(lambda x: ','.join(sorted(set(x.split(',')))))
-final.to_excel("/run/media/administrator/Expansion1/azure_backup/final_vcf/s3_uploaded_snps/1721_samples/PRX/Pharmacogenomics/PGx_Genes_Key_Variants/Cond3_All_Star_Alleles/new_distance_files_mul_pos_21_12_2023/{}_snp_pos_distance.xlsx".format(sys.argv[1], sys.argv[1]), index = False)
+final.to_excel("/{}_snp_pos_distance.xlsx".format(sys.argv[1], sys.argv[1]), index = False)
 print("Condition3 is finished for the sample")
